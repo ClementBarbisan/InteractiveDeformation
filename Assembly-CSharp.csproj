@@ -59,6 +59,8 @@
      <Compile Include="Assets\Scripts\PointOctreeNode.cs" />
      <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
      <Compile Include="Assets\Scripts\PointOctree.cs" />
+     <Compile Include="Assets\InstantiateCubes.cs" />
+     <Compile Include="Assets\DestroyOnHide.cs" />
      <None Include="Assets\shaders\ModifyMesh.compute" />
  <Reference Include="UnityEngine">
  <HintPath>E:/Program Files/2020.3.2f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
