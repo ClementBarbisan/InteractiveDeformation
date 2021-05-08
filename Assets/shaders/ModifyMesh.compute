@@ -1,0 +1,57 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+RWStructuredBuffer<float3>		_VertexBuffer;
+StructuredBuffer<float3>		_InitialPositionBuffer;
+StructuredBuffer<float3>		_InitialNormalBuffer;
+RWStructuredBuffer<float3>		_ImpactPositionBuffer;
+StructuredBuffer<float4>		_ColorsBuffer;
+
+float  _Time;
+float _pushforce;
+float _elacticity;
+float _drag;
+
+[numthreads(512,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+
+	// float3 velocity   = _ImpactPositionBuffer[id.x];
+	// float3 initialPos = _InitialPositionBuffer[id.x];
+
+	// // -------------------------------------------------------------------------------------------------------------------------------------------------------
+	// // Slowing down veloctiy over time. Keep this value under 1. closer to zero is more rigid materials and closer to one more squischy materials
+	//velocity *= _drag;
+ //
+	// // -------------------------------------------------------------------------------------------------------------------------------------------------------
+	// // Calculations for the right hand
+	// float3 vToHand  = _VertexBuffer[id.x] - _RHandPosition;
+	// float  distance = length(vToHand);
+ //
+	//  vToHand = normalize(vToHand);
+	//
+ //     velocity += clamp(-1,1.,_RHandVelocity) * smoothstep(_distnaceEnd, _distanceBegin, distance) *  saturate(dot(vToHand, _RHandVelocity)) * _pushforce;
+ //
+	//  // -------------------------------------------------------------------------------------------------------------------------------------------------------
+	//  // Calculations for the left hand
+ //
+	//  vToHand  = _VertexBuffer[id.x].position - _LHandPosition;
+	//  distance = length(vToHand);
+ //
+	//  vToHand = normalize(vToHand);
+ //
+	//  velocity += clamp(-1., 1., _LHandVelocity) * smoothstep(_distnaceEnd, _distanceBegin, distance) *  saturate(dot(vToHand, _LHandVelocity)) * _pushforce;
+ //
+ //
+	//  // -------------------------------------------------------------------------------------------------------------------------------------------------------
+	//  // The force that brings the pieces back to their original position
+	//  float3 vToOrig = initialPos - _VertexBuffer[id.x].position;
+ //
+	// velocity += vToOrig * _elacticity;
+ //
+ //
+	// // -------------------------------------------------------------------------------------------------------------------------------------------------------
+	_VertexBuffer[id.x] = (_ImpactPositionBuffer[id.x] * _InitialNormalBuffer[id.x]) + _InitialPositionBuffer[id.x];
+	_ImpactPositionBuffer[id.x] /= 1.01;
+	// _VertexBuffer[id.x].velocity  = velocity;
+}
