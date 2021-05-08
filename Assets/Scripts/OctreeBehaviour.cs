@@ -23,11 +23,13 @@ public class OctreeBehaviour : MonoBehaviour
     private int _kernelId;
     private ComputeBuffer _buffInitNormal;
     private List<Vector3> _initNormal;
+    [SerializeField] private float _scale = 0.1f;
 
     // Start is called before the first frame update
     void Start()
     {
         _meshFilter = GetComponent<MeshFilter>();
+        _computeKernel = Instantiate(_computeKernel);
         _countVertices = _meshFilter.mesh.vertexCount;
         _initPos = new List<Vector3>();
         _initNormal = new List<Vector3>();
@@ -98,11 +100,20 @@ public class OctreeBehaviour : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         List<int> tmpIndexes = new List<int>();
-        _octreePoints.GetColliding(tmpIndexes, new Bounds(other.transform.position, other.transform.localScale * 2));
+        Debug.Log("Enter");
+        _octreePoints.GetColliding(tmpIndexes, new Bounds(other.transform.position, other.transform.localScale / 5));
         foreach (int index in tmpIndexes)
         {
             Debug.Log("Impact");
-            _impactList[index] = other.rigidbody.velocity;
+            Vector3 normOther = other.transform.position;
+            Vector3 normInit =_initPos[index];
+            _impactList[index] = (1f / Vector3.Distance(other.transform.position, transform.position)) *
+                new Vector3( 1f - (normOther.x - normInit.x) /** (normOther.x - normInit.x)*/,
+                    1f - (normOther.y - normInit.y)/* * (normOther.y - normInit.y)*/,
+                    1f - (normOther.z - normInit.z) /** (normOther.z - normInit.z)*/) / 2;
+            // _impactList[index] = other.transform.position + other.transform.position - transform.position;
+            //new Vector3(normInit.x - normOther.x, normInit.y - normOther.y, normInit.z - normOther.z) / 20;
+
             //Vector3.Scale(-_meshFilter.mesh.normals[index],  other.transform.position - _meshFilter.mesh.vertices[index]) * (1f - Vector3.Distance(other.transform.position.normalized, _meshFilter.mesh.vertices[index].normalized));
         }
     }
@@ -110,21 +121,27 @@ public class OctreeBehaviour : MonoBehaviour
     private void OnCollisionStay(Collision other)
     {
         List<int> tmpIndexes = new List<int>();
-        _octreePoints.GetColliding(tmpIndexes, new Bounds(other.transform.position, other.transform.localScale * 2));
+        _octreePoints.GetColliding(tmpIndexes, new Bounds(other.transform.position, other.transform.localScale / 5));
         foreach (int index in tmpIndexes)
         {
-            _impactList[index] = other.rigidbody.velocity;
+            Debug.Log("ImpactStay");
+            Vector3 normOther = other.transform.position;
+            Vector3 normInit = _initPos[index];
+            _impactList[index] = Mathf.Pow(1f /** Time.deltaTime * 20*/ / (Vector3.Distance(other.transform.position, transform.position)), 2) *
+                new Vector3( 1f - (normOther.x - normInit.x) /** (normOther.x - normInit.x)*/,
+                    1f - (normOther.y - normInit.y)/* * (normOther.y - normInit.y)*/,
+                    1f - (normOther.z - normInit.z) /** (normOther.z - normInit.z)*/) / 2 ;
             //Vector3.Scale(-_meshFilter.mesh.normals[index], other.transform.position - _meshFilter.mesh.vertices[index]) * (1f - Vector3.Distance(other.transform.position.normalized, _meshFilter.mesh.vertices[index].normalized));
         }
     }
     
     private void OnCollisionExit(Collision other)
     {
-        List<int> tmpIndexes = new List<int>();
-        _octreePoints.GetColliding(tmpIndexes, new Bounds(other.transform.position, other.transform.localScale * 2));
-        foreach (int index in tmpIndexes)
-        {
-            _impactList[index] = Vector3.zero;
-        }
+        // List<int> tmpIndexes = new List<int>();
+        // _octreePoints.GetColliding(tmpIndexes, new Bounds(other.transform.position, other.transform.localScale));
+        // foreach (int index in tmpIndexes)
+        // {
+        //     _impactList[index] = Vector3.zero;
+        // }
     }
 }

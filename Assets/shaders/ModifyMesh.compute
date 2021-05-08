@@ -51,7 +51,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
  //
  //
 	// // -------------------------------------------------------------------------------------------------------------------------------------------------------
-	_VertexBuffer[id.x] = (_ImpactPositionBuffer[id.x] * _InitialNormalBuffer[id.x]) + _InitialPositionBuffer[id.x];
-	_ImpactPositionBuffer[id.x] /= 1.01;
+	_VertexBuffer[id.x] = (_ImpactPositionBuffer[id.x] / 10 * -_InitialNormalBuffer[id.x]) + _InitialPositionBuffer[id.x];
+	_ImpactPositionBuffer[id.x] /= 1.05;
 	// _VertexBuffer[id.x].velocity  = velocity;
 }

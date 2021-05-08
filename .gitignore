@@ -1,2 +1,6 @@
 Logs/
 Library/
+Temp/
+obj/
+ProjectSettings/XRPackageSettings.asset
+.idea/
