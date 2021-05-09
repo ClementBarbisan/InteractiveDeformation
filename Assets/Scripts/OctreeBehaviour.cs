@@ -60,7 +60,7 @@ public class OctreeBehaviour : MonoBehaviour
             _pos.Add(tmpMesh.vertices[i]);
             _initNormal.Add(tmpMesh.normals[i]);
             _impactList.Add(Vector3.zero);
-            _colors.Add(((Texture2D)render.material.mainTexture).GetPixel(i % render.material.mainTexture.width, i / render.material.mainTexture.height));
+            _colors.Add(((Texture2D)render.material.GetTexture("_MetallicGlossMap")).GetPixelBilinear(i % render.material.mainTexture.width, i / render.material.mainTexture.height));
             _octreePoints.Add(i, new Bounds((Quaternion.Euler(transform.rotation.eulerAngles) * Vector3.Scale(tmpMesh.vertices[i], transform.localScale)) + transform.position, Vector3.one * 0.01f));
         }
         _buffInitPos.SetData(_initPos.ToArray());

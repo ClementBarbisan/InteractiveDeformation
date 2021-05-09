@@ -19,8 +19,8 @@ public class InstantiateCubes : MonoBehaviour
         _timeElapsed += Time.deltaTime;
         if (_timeElapsed > _timeBetweenCubes)
         {
-            GameObject go = Instantiate(_gameObject, transform.position + new Vector3(Random.Range(-0.5f, 0.5f), 0, Random.Range(-0.5f, 0.5f)), Quaternion.identity);
-            go.transform.localScale = transform.localScale;
+            GameObject go = Instantiate(_gameObject, transform.position + new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f)), Quaternion.identity);
+            // go.transform.localScale = transform.localScale;
             go.transform.SetParent(this.transform);
             _timeElapsed = 0;
             _timeBetweenCubes = Random.Range(0.1f, 0.5f);
