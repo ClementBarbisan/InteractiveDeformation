@@ -58,7 +58,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 				float3( 1 - (normOther.x - normInit.x),
 				1 - (normOther.y - normInit.y),
 				1 - (normOther.z - normInit.z)) * (normOther / _drag);
-		_VertexBuffer[id.x] = (impact  * -_InitialNormalBuffer[id.x]) + normInit;
+		_VertexBuffer[id.x] = (impact  * -_InitialNormalBuffer[id.x] * (_ColorsBuffer[id.x])) + normInit;
 	//}
 	_ImpactPositionBuffer[id.x] /= _elacticity;
 
