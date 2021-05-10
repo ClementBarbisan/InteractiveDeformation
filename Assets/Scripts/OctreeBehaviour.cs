@@ -91,9 +91,9 @@ public class OctreeBehaviour : MonoBehaviour
         _impactPos.GetData(tmpImpact);
         _impactList = tmpImpact.ToList();
         _meshFilter.mesh.SetVertices(tmpVertices);
-        _meshFilter.mesh.RecalculateBounds();
+        //_meshFilter.mesh.RecalculateBounds();
         _meshFilter.mesh.RecalculateNormals();
-        _meshFilter.mesh.RecalculateTangents();
+        //_meshFilter.mesh.RecalculateTangents();
         _meshFilter.mesh.MarkModified();
         
     }
@@ -109,7 +109,7 @@ public class OctreeBehaviour : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         List<int> tmpIndexes = new List<int>();
-        _octreePoints.GetColliding(tmpIndexes, new Bounds(other.transform.position, Vector3.one / 10));
+        _octreePoints.GetColliding(tmpIndexes, new Bounds(other.transform.position, other.transform.localScale / 5));
         foreach (int index in tmpIndexes)
         {
             _impactList[index] = other.transform.position;
@@ -120,7 +120,7 @@ public class OctreeBehaviour : MonoBehaviour
     private void OnCollisionStay(Collision other)
     {
         List<int> tmpIndexes = new List<int>();
-        _octreePoints.GetColliding(tmpIndexes, new Bounds(other.transform.position, Vector3.one / 10));
+        _octreePoints.GetColliding(tmpIndexes, new Bounds(other.transform.position, other.transform.localScale / 5));
         foreach (int index in tmpIndexes)
         {
             _impactList[index] = other.transform.position;
@@ -133,13 +133,13 @@ public class OctreeBehaviour : MonoBehaviour
         _computeKernel.SetFloat("_elacticity", _elasticity);
     }
 
-    // private void OnCollisionExit(Collision other)
-    // {
-    //     List<int> tmpIndexes = new List<int>();
-    //     _octreePoints.GetColliding(tmpIndexes, new Bounds(other.transform.position, other.transform.localScale / 5));
-    //     foreach (int index in tmpIndexes)
-    //     {
-    //         _impactList[index] = Vector3.zero;
-    //     }
-    // }
+    private void OnCollisionExit(Collision other)
+    {
+        List<int> tmpIndexes = new List<int>();
+        _octreePoints.GetColliding(tmpIndexes, new Bounds(other.transform.position, other.transform.localScale / 5));
+        foreach (int index in tmpIndexes)
+        {
+            _impactList[index] = Vector3.zero;
+        }
+    }
 }
