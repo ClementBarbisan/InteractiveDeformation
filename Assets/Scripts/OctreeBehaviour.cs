@@ -91,6 +91,9 @@ public class OctreeBehaviour : MonoBehaviour
         _impactPos.GetData(tmpImpact);
         _impactList = tmpImpact.ToList();
         _meshFilter.mesh.SetVertices(tmpVertices);
+        _meshFilter.mesh.RecalculateBounds();
+        _meshFilter.mesh.RecalculateNormals();
+        _meshFilter.mesh.RecalculateTangents();
         _meshFilter.mesh.MarkModified();
         
     }
